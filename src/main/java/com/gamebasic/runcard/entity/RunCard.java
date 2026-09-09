@@ -1,16 +1,7 @@
 package com.gamebasic.runcard.entity;
 
 import com.gamebasic.game.entity.Game;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,13 +19,14 @@ public class RunCard {
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String cardType;
+    private CardType cardType;
 
     @Column(nullable = false)
     private int acquiredFloor;
 
-    public RunCard(Game game, String cardType, int acquiredFloor) {
+    public RunCard(Game game, CardType cardType, int acquiredFloor) {
         this.game = game;
         this.cardType = cardType;
         this.acquiredFloor = acquiredFloor;
