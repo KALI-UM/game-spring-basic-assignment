@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -45,5 +46,17 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorResponse> respond(HttpStatus status, String message, HttpServletRequest request) {
         return ResponseEntity.status(status).body(new ErrorResponse(status, message, request.getRequestURI()));
+    }
+
+    @ExceptionHandler (GameFinishedException.class)
+    public ResponseEntity<ErrorResponse> handleGameFinished(GameFinishedException e, HttpServletRequest request) {
+        return respond(HttpStatus.CONFLICT, e.getMessage(), request);
+    }
+
+
+
+    @ExceptionHandler (GameNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleGameNotFound(GameNotFoundException e, HttpServletRequest request) {
+        return respond(HttpStatus.NOT_FOUND, e.getMessage(), request);
     }
 }

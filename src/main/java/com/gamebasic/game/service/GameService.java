@@ -57,7 +57,7 @@ public class GameService {
 
     private Game findGame(Long gameId) {
         return gameRepository.findById(gameId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GameNotFoundException(gameId));
     }
 
     @Transactional
@@ -65,7 +65,7 @@ public class GameService {
         Game game = findGame(gameId);
 
         if(game.isFinished()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "게임이 종료된 상태입니다.");
+            throw new GameFinishedException(gameId);
         }
 
         game.updateProgress(
