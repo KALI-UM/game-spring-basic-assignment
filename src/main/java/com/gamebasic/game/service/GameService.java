@@ -1,5 +1,6 @@
 package com.gamebasic.game.service;
 
+import com.gamebasic.common.exception.GameFinishedException;
 import com.gamebasic.common.exception.GameNotFoundException;
 import com.gamebasic.game.dto.*;
 import com.gamebasic.game.entity.Game;
@@ -62,6 +63,11 @@ public class GameService {
     @Transactional
     public GameDetailResponse updateProgress(Long gameId, ProgressRequest request) {
         Game game = findGame(gameId);
+
+        if(game.isFinished()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "게임이 종료된 상태입니다.");
+        }
+
         game.updateProgress(
                 request.getCurrentHp(),
                 request.getCurrentFloor(),
