@@ -7,6 +7,7 @@ import com.gamebasic.game.entity.Game;
 import com.gamebasic.game.repository.GameRepository;
 import com.gamebasic.runcard.dto.CardResponse;
 import com.gamebasic.runcard.dto.RunCardRequest;
+import com.gamebasic.runcard.entity.DeckCount;
 import com.gamebasic.runcard.entity.RunCard;
 import com.gamebasic.runcard.repository.RunCardRepository;
 import jakarta.validation.Valid;
@@ -43,7 +44,9 @@ public class GameService {
                 game.getCurrentFloor(),
                 game.getPhase(),
                 game.getStatus(),
-                deck
+                deck,
+                game.getCreatedAt(),
+                game.getModifiedAt()
         );
     }
 
@@ -89,7 +92,9 @@ public class GameService {
                 game.getCurrentFloor(),
                 game.getPhase(),
                 game.getStatus(),
-                deck
+                deck,
+                game.getCreatedAt(),
+                game.getModifiedAt()
         );
     }
 
@@ -99,13 +104,25 @@ public class GameService {
     public List<GameSummaryResponse> getGames() {
 
         List<Game> games = gameRepository.getAllByOrderByIdAsc();
+        List<DeckCount> deckCounts = runCardRepository.countByGames(games);
 
         List<GameSummaryResponse> saves = new ArrayList<>();
-        for (Game game : games) {
 
-            List<RunCard> cards = runCardRepository.findAllByGameOrderByIdAsc(game);
+        for (int i=0; i<games.size(); i++) {
+
+            Game game = games.get(i);
+
+            //List<RunCard> cards = runCardRepository.findAllByGameOrderByIdAsc(game);
             saves.add(new GameSummaryResponse(
-                    game.getId(), game.getPlayerName(), game.getCurrentHp(), game.getCurrentFloor(), game.getPhase(), game.getStatus(), cards.size()));
+                    game.getId(),
+                    game.getPlayerName(),
+                    game.getCurrentHp(),
+                    game.getCurrentFloor(),
+                    game.getPhase(),
+                    game.getStatus(),
+                    deckCounts.get(i).getDeckCount(),
+                    game.getCreatedAt(),
+                    game.getModifiedAt()));
         }
         return saves;
     }
@@ -124,7 +141,9 @@ public class GameService {
                 game.getCurrentFloor(),
                 game.getPhase(),
                 game.getStatus(),
-                cards
+                cards,
+                game.getCreatedAt(),
+                game.getModifiedAt()
         );
     }
 

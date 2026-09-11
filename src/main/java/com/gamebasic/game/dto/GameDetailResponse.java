@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -19,6 +20,9 @@ public class GameDetailResponse {
     private final GameStatus status;
     private final List<CardResponse> deck;
 
+    private final LocalDateTime createdAt;
+    private final LocalDateTime modifiedAt;
+
     public GameDetailResponse(
         Long id,
         String playerName,
@@ -26,7 +30,9 @@ public class GameDetailResponse {
         int currentFloor,
         GamePhase phase,
         GameStatus status,
-        List<CardResponse> deck
+        List<CardResponse> deck,
+        LocalDateTime createdAt,
+        LocalDateTime modifiedAt
     ) {
         this.id = id;
         this.playerName = playerName;
@@ -35,5 +41,8 @@ public class GameDetailResponse {
         this.phase = phase;
         this.status = status;
         this.deck = List.copyOf(deck);
+
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 }
