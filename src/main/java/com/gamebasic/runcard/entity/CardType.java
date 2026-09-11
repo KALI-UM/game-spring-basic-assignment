@@ -1,5 +1,7 @@
 package com.gamebasic.runcard.entity;
 
+import java.util.Optional;
+
 public enum CardType {
     STRIKE("베기"),
     GUARD("밤의 장막"),
@@ -46,7 +48,19 @@ public enum CardType {
         this.description = description;
     }
 
-    public String getDescription() {
-        return description;
+    public static Optional<CardType> toCardType(String value) {
+        if (value == null) {
+            return Optional.empty();
+        }
+
+        try {
+            return Optional.of(CardType.valueOf(value));
+        } catch (IllegalArgumentException e) {
+            return Optional.empty();
+        }
+    }
+
+    public static boolean isValid(String value) {
+        return toCardType(value).isPresent();
     }
 }

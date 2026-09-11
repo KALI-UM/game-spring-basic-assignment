@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Entity
@@ -34,8 +33,6 @@ public class Game extends BaseEntity {
 
 
     public Game(String playerName) {
-
-        super();
 
         this.playerName = playerName;
         this.currentHp = 99;
